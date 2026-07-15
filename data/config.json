@@ -1,0 +1,20 @@
+{
+  "sprite_size": 110,
+  "font_size": 17,
+  "bubble_height": 82,
+  "auto_wander": false,
+  "always_on_top": true,
+  "behavior_interval_seconds": 6,
+  "move_speed": 1.0,
+  "sleep_after_minutes": 10,
+  "start_with_windows": false,
+  "pomodoro_work_minutes": 25,
+  "pomodoro_break_minutes": 5,
+  "position_x": 1394,
+  "position_y": 155,
+  "enabled_plugins": {
+    "reminder": true,
+    "pomodoro": true,
+    "system_info": true
+  }
+}
