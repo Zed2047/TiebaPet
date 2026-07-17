@@ -11,14 +11,14 @@ from PySide6.QtCore import QTimer
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
-from huangdou.assets import SpriteAtlas
-from huangdou.config import ConfigManager
-from huangdou.logging_setup import configure_logging, install_exception_hooks
-from huangdou.pet import PetWindow
-from huangdou.phrases import PhraseRepository
-from huangdou.plugins.base import PluginContext
-from huangdou.plugins.manager import PluginManager
-from huangdou.state import StateMachine
+from tiebapet.assets import SpriteAtlas
+from tiebapet.config import ConfigManager
+from tiebapet.logging_setup import configure_logging, install_exception_hooks
+from tiebapet.pet import PetWindow
+from tiebapet.phrases import PhraseRepository
+from tiebapet.plugins.base import PluginContext
+from tiebapet.plugins.manager import PluginManager
+from tiebapet.state import StateMachine
 
 
 LOGGER = logging.getLogger(__name__)
@@ -79,12 +79,8 @@ def main() -> int:
 
     try:
         atlas = SpriteAtlas()
-        config_path = os.environ.get("TIEBAPET_CONFIG_PATH") or os.environ.get(
-            "HUANGDOU_CONFIG_PATH"
-        )
-        phrases_path = os.environ.get("TIEBAPET_PHRASES_PATH") or os.environ.get(
-            "HUANGDOU_PHRASES_PATH"
-        )
+        config_path = os.environ.get("TIEBAPET_CONFIG_PATH")
+        phrases_path = os.environ.get("TIEBAPET_PHRASES_PATH")
         config = ConfigManager(Path(config_path)) if config_path else ConfigManager()
         phrases = (
             PhraseRepository(Path(phrases_path))
@@ -99,9 +95,7 @@ def main() -> int:
     state = StateMachine()
     pet = PetWindow(atlas, config, phrases, state)
     plugin_context = PluginContext(pet=pet, config=config, state=state)
-    extension_path = os.environ.get("TIEBAPET_EXTENSIONS_PATH") or os.environ.get(
-        "HUANGDOU_EXTENSIONS_PATH"
-    )
+    extension_path = os.environ.get("TIEBAPET_EXTENSIONS_PATH")
     plugins = PluginManager(
         plugin_context,
         Path(extension_path) if extension_path else None,
@@ -120,16 +114,13 @@ def main() -> int:
     pet.say("黄豆 2.1 已上线，今天也得整点活", 4200)
 
     # 自动化测试使用，正常启动时不会触发。
-    if (
-        os.environ.get("TIEBAPET_SMOKE_TEST") == "1"
-        or os.environ.get("HUANGDOU_SMOKE_TEST") == "1"
-    ):
+    if os.environ.get("TIEBAPET_SMOKE_TEST") == "1":
         QTimer.singleShot(700, app.quit)
 
     # 防止 Qt 对象被垃圾回收。
-    app._huangdou_tray = tray  # type: ignore[attr-defined]
-    app._huangdou_pet = pet  # type: ignore[attr-defined]
-    app._huangdou_plugins = plugins  # type: ignore[attr-defined]
+    app._tiebapet_tray = tray  # type: ignore[attr-defined]
+    app._tiebapet_pet = pet  # type: ignore[attr-defined]
+    app._tiebapet_plugins = plugins  # type: ignore[attr-defined]
     return app.exec()
 
 

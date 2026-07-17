@@ -215,6 +215,11 @@ class PhraseRepository:
             encoding="utf-8",
         )
 
+    def reset_to_defaults(self) -> None:
+        """用当前版本内置默认文案覆盖外部文案文件。"""
+        self._write_defaults()
+        self.reload()
+
     def reload(self) -> None:
         if not self.path.exists():
             self._write_defaults()

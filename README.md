@@ -48,7 +48,7 @@ python main.py
 
 ### 修改表情对应文案
 
-右键黄豆，点击“打开用户数据目录”，编辑其中的 `phrases.json`。每个表情名对应一组台词，例如：
+右键黄豆，点击“打开数据目录”，编辑其中的 `phrases.json`。每个表情名对应一组台词，例如：
 
 ```json
 {
@@ -62,23 +62,24 @@ python main.py
 
 新增台词时不要在末尾添加句号，需要语气时只保留 `？`、`！` 等字符。保存后右键黄豆，点击“重新加载文案”，无需重启。
 
-## 用户数据位置
+## 数据和文案位置
 
-运行后会在以下目录保存个人数据，不再改写程序安装目录：
+程序不会再把数据写入 `%APPDATA%`，运行所需文件都放在桌宠目录中：
 
 ```text
-%APPDATA%\TiebaPet\
-├─ config.json                 # 大小、字体、位置和插件状态
-├─ phrases.json                # 表情与台词
-├─ extensions\                # 第三方插件
-├─ cache\expressions\         # 透明表情缓存
-└─ logs\tieba-pet.log          # 运行与错误日志
+桌宠\
+├─ data\
+│  ├─ config.json                 # 窗口、外观和插件设置
+│  ├─ phrases.json                # 表情与台词，可直接编辑
+│  └─ cache\expressions\         # 表情缓存
+├─ extensions\                   # 第三方插件
+└─ logs\
+   └─ tieba-pet.log               # 运行与错误日志
 ```
 
-项目中的 `data\config.json` 和 `data\phrases.json` 是初始模板。用户文件不存在时才会复制，已有文件不会被覆盖。
+右键桌宠，点击“打开数据目录”即可打开 `data` 文件夹。修改 `phrases.json` 后，点击“重新加载文案”即可生效；“恢复默认文案”会覆盖当前文案文件，请谨慎使用。
 
-从旧版升级时，程序会在首次运行时把 `%APPDATA%\HuangdouPet` 复制到 `%APPDATA%\TiebaPet`，旧目录仍会保留。
-
+升级时请先备份 `data\phrases.json`。程序不会自动覆盖已有数据，是否替换为新版本文案由用户自行决定。
 ## 插件系统
 
 内置插件：
@@ -87,7 +88,7 @@ python main.py
 - 番茄钟：专注和休息倒计时，重启后可继续
 - 系统状态：显示时间、CPU 和内存占用
 
-第三方插件放入 `%APPDATA%\TiebaPet\extensions`，下次启动自动加载。插件菜单会显示加载数量和错误数量。插件是可执行代码，只安装来源可信的插件。
+第三方插件放入桌宠目录下的 `extensions` 文件夹，下次启动自动加载。插件菜单会显示加载数量和错误数量。插件是可执行代码，只安装来源可信的插件。
 
 ## 打包 EXE
 
@@ -113,7 +114,7 @@ python tests\core_test.py
 ├─ assets\expressions\        # 原始表情
 ├─ data\                      # 用户数据初始模板
 ├─ extensions\                # 插件开发示例
-├─ huangdou\
+├─ tiebapet\
 │  ├─ assets.py               # 图片透明化、磁盘与内存缓存
 │  ├─ config.py               # 设置持久化
 │  ├─ paths.py                # 安装目录和用户目录

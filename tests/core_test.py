@@ -11,21 +11,21 @@ from tempfile import TemporaryDirectory
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 TEST_DATA = TemporaryDirectory()
-os.environ["HUANGDOU_DATA_DIR"] = TEST_DATA.name
+os.environ["TIEBAPET_DATA_DIR"] = TEST_DATA.name
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
-from huangdou.assets import SpriteAtlas  # noqa: E402
-from huangdou.config import ConfigManager  # noqa: E402
-from huangdou.pet import PetWindow  # noqa: E402
-from huangdou.phrases import PhraseRepository  # noqa: E402
-from huangdou.plugins.base import PluginContext  # noqa: E402
-from huangdou.plugins.manager import PluginManager  # noqa: E402
-from huangdou.plugins.pomodoro import PomodoroPlugin  # noqa: E402
-from huangdou.plugins.reminder import ReminderPlugin  # noqa: E402
-from huangdou.plugins.system_info import SystemInfoPlugin  # noqa: E402
-from huangdou.state import PetState, StateMachine  # noqa: E402
+from tiebapet.assets import SpriteAtlas  # noqa: E402
+from tiebapet.config import ConfigManager  # noqa: E402
+from tiebapet.pet import PetWindow  # noqa: E402
+from tiebapet.phrases import PhraseRepository  # noqa: E402
+from tiebapet.plugins.base import PluginContext  # noqa: E402
+from tiebapet.plugins.manager import PluginManager  # noqa: E402
+from tiebapet.plugins.pomodoro import PomodoroPlugin  # noqa: E402
+from tiebapet.plugins.reminder import ReminderPlugin  # noqa: E402
+from tiebapet.plugins.system_info import SystemInfoPlugin  # noqa: E402
+from tiebapet.state import PetState, StateMachine  # noqa: E402
 
 
 def main() -> int:
@@ -53,6 +53,8 @@ def main() -> int:
         )
         phrases.reload()
         assert phrases.for_expression("开心") == "测试文案"
+        phrases.reset_to_defaults()
+        assert phrases.for_expression("开心") != "测试文案"
 
         state = StateMachine()
         pet = PetWindow(atlas, reloaded, phrases, state)
@@ -64,7 +66,7 @@ def main() -> int:
         extension_dir = root / "extensions"
         extension_dir.mkdir()
         (extension_dir / "demo.py").write_text(
-            "from huangdou.plugins.base import BasePlugin\n"
+            "from tiebapet.plugins.base import BasePlugin\n"
             "class DemoPlugin(BasePlugin):\n"
             "    plugin_id = 'demo'\n"
             "    display_name = '测试插件'\n"
@@ -73,7 +75,7 @@ def main() -> int:
             encoding="utf-8",
         )
         (extension_dir / "incompatible.py").write_text(
-            "from huangdou.plugins.base import BasePlugin\n"
+            "from tiebapet.plugins.base import BasePlugin\n"
             "class OldPlugin(BasePlugin):\n"
             "    api_version = 99\n"
             "    plugin_id = 'old'\n"
@@ -110,7 +112,8 @@ def main() -> int:
 
         menu = pet.build_context_menu()
         assert menu.actions()
-        assert any(action.text() == "打开用户数据目录" for action in menu.actions())
+        assert any(action.text() == "打开数据目录" for action in menu.actions())
+        assert any(action.text() == "恢复默认文案" for action in menu.actions())
         manager.shutdown()
         pet.shutdown()
         pet.close()

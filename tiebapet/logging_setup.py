@@ -10,12 +10,12 @@ from pathlib import Path
 
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from .paths import ensure_user_directories, user_data_root
+from .paths import ensure_user_directories, logs_root
 
 
 def configure_logging(log_file: Path | None = None) -> Path:
     ensure_user_directories()
-    target = log_file or (user_data_root() / "logs" / "tieba-pet.log")
+    target = log_file or (logs_root() / "tieba-pet.log")
     target.parent.mkdir(parents=True, exist_ok=True)
     root = logging.getLogger()
     root.setLevel(logging.INFO)
@@ -35,7 +35,7 @@ def configure_logging(log_file: Path | None = None) -> Path:
 
 
 def install_exception_hooks() -> None:
-    logger = logging.getLogger("huangdou.crash")
+    logger = logging.getLogger("tiebapet.crash")
 
     def handle_exception(exc_type, exc_value, traceback) -> None:
         logger.critical(
