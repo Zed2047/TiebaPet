@@ -38,7 +38,7 @@ jobs:
 
       - name: Build portable app
         run: >-
-          python -m PyInstaller --noconfirm --clean --windowed
+          python -m PyInstaller --noconfirm --clean --windowed --contents-directory "."
           --name "TiebaPet"
           --add-data "assets;assets"
           --add-data "data;data"

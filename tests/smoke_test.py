@@ -9,14 +9,14 @@ from tempfile import TemporaryDirectory
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 TEST_DATA = TemporaryDirectory()
-os.environ["HUANGDOU_DATA_DIR"] = TEST_DATA.name
+os.environ["TIEBAPET_DATA_DIR"] = TEST_DATA.name
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
-from huangdou.assets import ASSET_DIR, SpriteAtlas  # noqa: E402
-from huangdou.pet import PetWindow  # noqa: E402
-from huangdou.phrases import EXPRESSION_NAMES, PASSIVE_PHRASES, PHRASES  # noqa: E402
+from tiebapet.assets import ASSET_DIR, SpriteAtlas  # noqa: E402
+from tiebapet.pet import PetWindow  # noqa: E402
+from tiebapet.phrases import EXPRESSION_NAMES, PASSIVE_PHRASES, PHRASES  # noqa: E402
 
 
 def main() -> int:

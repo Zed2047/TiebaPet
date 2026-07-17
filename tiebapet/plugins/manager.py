@@ -13,7 +13,7 @@ from .base import BasePlugin, PluginContext
 from .pomodoro import PomodoroPlugin
 from .reminder import ReminderPlugin
 from .system_info import SystemInfoPlugin
-from ..paths import user_data_root
+from ..paths import extensions_root
 
 
 LOGGER = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class PluginManager:
         self.plugins: dict[str, BasePlugin] = {}
         self.errors: list[str] = []
         self.extension_dir = extension_dir or (
-            user_data_root() / "extensions"
+            extensions_root()
         )
 
     def _register(self, plugin: BasePlugin) -> None:
@@ -55,7 +55,7 @@ class PluginManager:
                 continue
             try:
                 spec = importlib.util.spec_from_file_location(
-                    f"huangdou_extension_{path.stem}", path
+                    f"tiebapet_extension_{path.stem}", path
                 )
                 if not spec or not spec.loader:
                     raise ImportError("无法创建模块加载器")

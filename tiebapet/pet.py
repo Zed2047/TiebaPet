@@ -350,7 +350,11 @@ class PetWindow(QWidget):
         reload_phrases.triggered.connect(self._reload_phrases)
         menu.addAction(reload_phrases)
 
-        open_data = QAction("打开用户数据目录", menu)
+        reset_phrases = QAction("恢复默认文案", menu)
+        reset_phrases.triggered.connect(self._reset_phrases)
+        menu.addAction(reset_phrases)
+
+        open_data = QAction("打开数据目录", menu)
         open_data.triggered.connect(self.open_user_data_directory)
         menu.addAction(open_data)
 
@@ -393,6 +397,19 @@ class PetWindow(QWidget):
     def _reload_phrases(self) -> None:
         self.phrases.reload()
         self.say("文案已重新加载")
+
+    def _reset_phrases(self) -> None:
+        result = QMessageBox.question(
+            self,
+            "恢复默认文案",
+            "这会覆盖当前 data\\phrases.json，确定继续吗？",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if result != QMessageBox.StandardButton.Yes:
+            return
+        self.phrases.reset_to_defaults()
+        self.say("默认文案已恢复")
 
     def contextMenuEvent(self, event: QContextMenuEvent) -> None:  # noqa: N802
         self._touch()
